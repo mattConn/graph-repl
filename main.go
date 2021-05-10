@@ -63,5 +63,8 @@ func main() {
 
 		// Exec command
 		cmd(g, operands)
+		if tokens[0] != "ls" {
+			commands.Render(g)
+		}
 	}
 }
