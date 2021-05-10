@@ -18,6 +18,7 @@ func main() {
 		tokens   []string
 		operands []int
 		cmd      func(*simple.UndirectedGraph, []int)
+		fpair    commands.Fpair
 		ok       bool
 	)
 	g := simple.NewUndirectedGraph()
@@ -35,16 +36,18 @@ func main() {
 			return
 		}
 		if tokens[0] == "help" {
-			for key := range commands.Commands {
-				fmt.Println(key)
+			for key, pair := range commands.Commands {
+				fmt.Printf("%s - %s\n", key, pair.Desc)
 			}
 			continue
 		}
 
 		// Check if command exists
-		if cmd, ok = commands.Commands[tokens[0]]; !ok {
+		if fpair, ok = commands.Commands[tokens[0]]; !ok {
+			fmt.Println("Unrecognized command:", tokens[0])
 			continue
 		}
+		cmd = fpair.Fn
 
 		// Convert tokens to ints
 		operands = make([]int, len(tokens[1:]))

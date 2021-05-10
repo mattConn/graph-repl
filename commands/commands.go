@@ -7,63 +7,107 @@ import (
 	"gonum.org/v1/gonum/graph/simple"
 )
 
-type Graph simple.UndirectedGraph
+// Graph function paired with string description
+type Fpair struct {
+	Desc string
+	Fn   func(*simple.UndirectedGraph, []int)
+}
 
-var Commands = map[string]func(*simple.UndirectedGraph, []int){
+var Commands = map[string]Fpair{
 	// List nodes and edges
-	"ls": func(g *simple.UndirectedGraph, nodes []int) {
-		fmt.Println(graph.NodesOf(g.Nodes()))
-		fmt.Println(graph.EdgesOf(g.Edges()))
+	"ls": {
+		Fn:   list,
+		Desc: "List all nodes and edges",
 	},
 
 	// Clear nodes
-	"cln": func(g *simple.UndirectedGraph, nodes []int) {
-		for _, n := range graph.NodesOf(g.Nodes()) {
-			g.RemoveNode(n.ID())
-		}
+	"cln": {
+		Fn:   clearNodes,
+		Desc: "Remove all nodes",
 	},
 
 	// Clear edges
-	"cle": func(g *simple.UndirectedGraph, nodes []int) {
-		for _, e := range graph.EdgesOf(g.Edges()) {
-			g.RemoveEdge(e.From().ID(), e.To().ID())
-		}
+	"cle": {
+		Fn:   clearEdges,
+		Desc: "Remove all edges",
 	},
 
 	// Add nodes over range
-	"..n": func(g *simple.UndirectedGraph, nodes []int) {
-		from := nodes[0]
-		to := nodes[1]
-		for ; from <= to; from++ {
-			g.AddNode(simple.Node(int64(from)))
-		}
+	"..": {
+		Fn:   addNodesRange,
+		Desc: "Add nodes over a range, e.g. .. 1 5",
 	},
 
 	// Add nodes
-	"addn": func(g *simple.UndirectedGraph, nodes []int) {
-		for _, n := range nodes {
-			g.AddNode(simple.Node(int64(n)))
-		}
+	"addn": {
+		Fn:   addNodes,
+		Desc: "Add nodes",
 	},
 
-	// Delete nodes
-	"deln": func(g *simple.UndirectedGraph, nodes []int) {
-		for _, n := range nodes {
-			g.RemoveNode(int64(n))
-		}
+	// Remove nodes
+	"deln": {
+		Fn:   removeNodes,
+		Desc: "Remove nodes",
 	},
 
 	// Add edges
-	"adde": func(g *simple.UndirectedGraph, nodes []int) {
-		for i := 0; i < len(nodes)-1; i += 2 {
-			g.SetEdge(g.NewEdge(simple.Node(nodes[i]), simple.Node(nodes[i+1])))
-		}
+	"adde": {
+		Fn:   addEdges,
+		Desc: "Add edges",
 	},
 
 	// Delete edges
-	"dele": func(g *simple.UndirectedGraph, nodes []int) {
-		for i := 0; i < len(nodes)-1; i += 2 {
-			g.RemoveEdge(int64(nodes[i]), int64(nodes[i+1]))
-		}
+	"dele": {
+		Fn:   removeEdges,
+		Desc: "Remove edges",
 	},
+}
+
+func list(g *simple.UndirectedGraph, nodes []int) {
+	fmt.Println(graph.NodesOf(g.Nodes()))
+	fmt.Println(graph.EdgesOf(g.Edges()))
+}
+
+func clearNodes(g *simple.UndirectedGraph, nodes []int) {
+	for _, n := range graph.NodesOf(g.Nodes()) {
+		g.RemoveNode(n.ID())
+	}
+}
+
+func clearEdges(g *simple.UndirectedGraph, nodes []int) {
+	for _, e := range graph.EdgesOf(g.Edges()) {
+		g.RemoveEdge(e.From().ID(), e.To().ID())
+	}
+}
+
+func addNodesRange(g *simple.UndirectedGraph, nodes []int) {
+	from := nodes[0]
+	to := nodes[1]
+	for ; from <= to; from++ {
+		g.AddNode(simple.Node(int64(from)))
+	}
+}
+
+func addNodes(g *simple.UndirectedGraph, nodes []int) {
+	for _, n := range nodes {
+		g.AddNode(simple.Node(int64(n)))
+	}
+}
+
+func removeNodes(g *simple.UndirectedGraph, nodes []int) {
+	for _, n := range nodes {
+		g.RemoveNode(int64(n))
+	}
+}
+
+func addEdges(g *simple.UndirectedGraph, nodes []int) {
+	for i := 0; i < len(nodes)-1; i += 2 {
+		g.SetEdge(g.NewEdge(simple.Node(nodes[i]), simple.Node(nodes[i+1])))
+	}
+}
+
+func removeEdges(g *simple.UndirectedGraph, nodes []int) {
+	for i := 0; i < len(nodes)-1; i += 2 {
+		g.RemoveEdge(int64(nodes[i]), int64(nodes[i+1]))
+	}
 }
