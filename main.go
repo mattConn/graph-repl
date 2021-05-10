@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"gonum.org/v1/gonum/graph"
 	"gonum.org/v1/gonum/graph/simple"
 )
 
@@ -18,13 +17,15 @@ func main() {
 		input    string
 		tokens   []string
 		operands []int
-		cmd      func(graph.Graph, []int)
+		cmd      func(*simple.UndirectedGraph, []int)
 		ok       bool
 	)
 	g := simple.NewUndirectedGraph()
 
 	for true {
 		fmt.Printf("> ")
+
+		// Read stdin and split into tokens
 		input, _ = reader.ReadString('\n')
 		tokens = strings.Fields(input)
 		if len(tokens) == 0 {
@@ -32,6 +33,12 @@ func main() {
 		}
 		if tokens[0] == "quit" {
 			return
+		}
+		if tokens[0] == "help" {
+			for key := range commands.Commands {
+				fmt.Println(key)
+			}
+			continue
 		}
 
 		// Check if command exists
