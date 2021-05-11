@@ -68,6 +68,30 @@ var Commands = map[string]Fpair{
 		Fn:   addCycle,
 		Desc: "Add cycle",
 	},
+
+	// Add star
+	"adds": {
+		Fn:   addStar,
+		Desc: "Add star",
+	},
+
+	// Add complete
+	"addk": {
+		Fn:   addComplete,
+		Desc: "Add complete",
+	},
+
+	// Add wheel
+	"addw": {
+		Fn:   addWheel,
+		Desc: "Add wheel",
+	},
+
+	// Add path
+	"addp": {
+		Fn:   addPath,
+		Desc: "Add path",
+	},
 }
 
 type nodeList []int
@@ -131,4 +155,20 @@ func removeEdges(g *simple.UndirectedGraph, nodes []int) {
 
 func addCycle(g *simple.UndirectedGraph, nodes []int) {
 	gen.Cycle(g, nodeList(nodes))
+}
+
+func addStar(g *simple.UndirectedGraph, nodes []int) {
+	gen.Star(g, int64(nodes[0]), nodeList(nodes[1:]))
+}
+
+func addComplete(g *simple.UndirectedGraph, nodes []int) {
+	gen.Complete(g, nodeList(nodes))
+}
+
+func addWheel(g *simple.UndirectedGraph, nodes []int) {
+	gen.Wheel(g, int64(nodes[0]), nodeList(nodes[1:]))
+}
+
+func addPath(g *simple.UndirectedGraph, nodes []int) {
+	gen.Path(g, nodeList(nodes))
 }
