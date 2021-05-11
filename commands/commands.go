@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"gonum.org/v1/gonum/graph"
+	"gonum.org/v1/gonum/graph/graphs/gen"
 	"gonum.org/v1/gonum/graph/simple"
 )
 
@@ -61,6 +62,22 @@ var Commands = map[string]Fpair{
 		Fn:   removeEdges,
 		Desc: "Remove edges",
 	},
+
+	// Add cycle
+	"addc": {
+		Fn:   addCycle,
+		Desc: "Add cycle",
+	},
+}
+
+type nodeList []int
+
+func (n nodeList) ID(i int) int64 {
+	return int64(n[i])
+}
+
+func (n nodeList) Len() int {
+	return len(n)
 }
 
 func list(g *simple.UndirectedGraph, nodes []int) {
@@ -110,4 +127,8 @@ func removeEdges(g *simple.UndirectedGraph, nodes []int) {
 	for i := 0; i < len(nodes)-1; i += 2 {
 		g.RemoveEdge(int64(nodes[i]), int64(nodes[i+1]))
 	}
+}
+
+func addCycle(g *simple.UndirectedGraph, nodes []int) {
+	gen.Cycle(g, nodeList(nodes))
 }
