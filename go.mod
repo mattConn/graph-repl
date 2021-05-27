@@ -7,4 +7,4 @@ require (
 	gonum.org/v1/plot v0.9.0
 )
 
-replace gonum.org/v1/gonum => ../gonum
+replace gonum.org/v1/gonum => ../gonum-gen-tree

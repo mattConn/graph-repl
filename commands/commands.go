@@ -92,6 +92,12 @@ var Commands = map[string]Fpair{
 		Fn:   addPath,
 		Desc: "Add path",
 	},
+
+	// Add tree
+	"addt": {
+		Fn:   addTree,
+		Desc: "Add tree",
+	},
 }
 
 type nodeList []int
@@ -171,4 +177,8 @@ func addWheel(g *simple.UndirectedGraph, nodes []int) {
 
 func addPath(g *simple.UndirectedGraph, nodes []int) {
 	gen.Path(g, nodeList(nodes))
+}
+
+func addTree(g *simple.UndirectedGraph, nodes []int) {
+	gen.Tree(g, nodes[0], nodeList(nodes[1:]))
 }
