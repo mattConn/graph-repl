@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"gonum.org/v1/gonum/graph"
+	"gonum.org/v1/gonum/graph/encoding/dot"
 	"gonum.org/v1/gonum/graph/graphs/gen"
 	"gonum.org/v1/gonum/graph/simple"
 )
@@ -98,6 +99,12 @@ var Commands = map[string]Fpair{
 		Fn:   addTree,
 		Desc: "Add tree",
 	},
+
+	// Add tree
+	"dot": {
+		Fn:   encodeDOT,
+		Desc: "Print DOT encoding",
+	},
 }
 
 type nodeList []int
@@ -181,4 +188,9 @@ func addPath(g *simple.UndirectedGraph, nodes []int) {
 
 func addTree(g *simple.UndirectedGraph, nodes []int) {
 	gen.Tree(g, nodes[0], nodeList(nodes[1:]))
+}
+
+func encodeDOT(g *simple.UndirectedGraph, nodes []int) {
+	encoding, _ := dot.Marshal(g, "", "", "\t")
+	fmt.Println(string(encoding))
 }
